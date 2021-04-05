@@ -1,0 +1,24 @@
+active: minimal
+boxes:
+  minimal:
+    name: minimal
+    image: example.com/image
+  docker:
+    name: docker
+    description: docker devbox
+    image: example.com/image:latest
+    shell: bash
+  minikube:
+    name: minikube
+    description: minikube devbox
+    image: example.com/image:1.0.0
+    shell: zsh
+    kubeconfig: ~/.kube/minikube
+    namespace: default
+  eks:
+    name: eks
+    description: eks devbox
+    image: example.com/image:1.0.0
+    shell: zsh
+    kubeconfig: ~/.kube/eks
+    namespace: devbox
