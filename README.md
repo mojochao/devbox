@@ -46,7 +46,7 @@ Application state may be queried for a list of the managed `boxes` as well.
 
 This application is easily installed with `go`.
 
-    go install github.com/mojochao/devbox-cli@latest
+    go install github.com/mojochao/devbox@latest
 
 ## Usage
 

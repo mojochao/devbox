@@ -7,21 +7,21 @@ import (
 
 	"github.com/mitchellh/go-homedir"
 
-	"github.com/mojochao/devbox-cli/internal/devbox"
+	"github.com/mojochao/devbox/internal/devbox"
 )
 
-// ensureDevboxID ensures that a devbox name to operate on is available
-// from the active context in devboxes or in name parameter.
-func ensureDevboxID(state devbox.State, name string) string {
-	// Any devbox name provided on the command line takes priority over any
-	// defined in the boxes file.
-	if name == "" {
-		name = state.Active
+// ensureDevboxID ensures that a devbox ID to operate on is available
+// from the active context in devboxes or in ID argument..
+func ensureDevboxID(state devbox.State, id string) string {
+	// Any devbox id provided on the command line takes priority over any
+	// defined in the state.
+	if id == "" {
+		id = state.Active
 	}
-	if name == "" {
-		exit(1, "start requires a devbox name, either in boxes or with --name flag")
+	if id == "" {
+		exit(1, "missing devbox ID in arguments or active context")
 	}
-	return name
+	return id
 }
 
 // exit exits the application with an exit code and a message.

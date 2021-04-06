@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 
-	"github.com/mojochao/devbox-cli/internal/devbox"
+	"github.com/mojochao/devbox/internal/devbox"
 )
 
 // initCmd represents the init command

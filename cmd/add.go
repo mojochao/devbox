@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"github.com/spf13/cobra"
 
-	"github.com/mojochao/devbox-cli/internal/devbox"
+	"github.com/mojochao/devbox/internal/devbox"
 )
 
 // addCmd represents the add command
 var addCmd = &cobra.Command{
 	Use:   "add ID [flags]",
-	Short: "AddDevbox devbox",
-	Long:  `A devbox must be added before it can be started and used. This command does that.`,
+	Short: "Add devbox to state",
+	Long:  `Devboxes must be added before they can be started and used.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// Ensure correct usage.
 		if len(args) < 1 {

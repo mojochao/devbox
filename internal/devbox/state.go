@@ -8,7 +8,7 @@ import (
 	"github.com/ghodss/yaml"
 	"github.com/mitchellh/go-homedir"
 
-	"github.com/mojochao/devbox-cli/internal/config"
+	"github.com/mojochao/devbox/internal/config"
 )
 
 // DefaultStateFile defines the default location of the boxes configuration file.

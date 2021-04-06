@@ -6,16 +6,17 @@ import (
 	"github.com/rodaine/table"
 	"github.com/spf13/cobra"
 
-	"github.com/mojochao/devbox-cli/internal/devbox"
+	"github.com/mojochao/devbox/internal/devbox"
 )
 
 // listCmd represents the list command
 var listCmd = &cobra.Command{
 	Aliases: []string{"ls"},
 	Use:     "list",
-	Short:   "List available devboxes",
-	Long: `Multiple devboxes may be managed. The list command displays their names and
-descriptions.`,
+	Short:   "List devboxes in state",
+	Long: `Multiple devboxes may be managed in application state.
+
+This command displays their ids and devbox data.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// Ensure correct usage.
 		if len(args) > 0 {

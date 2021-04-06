@@ -6,21 +6,24 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/mojochao/devbox-cli/internal/devbox"
+	"github.com/mojochao/devbox/internal/devbox"
 )
 
 // contextCmd represents the context command
 var contextCmd = &cobra.Command{
 	Aliases: []string{"ctx"},
 	Use:   "context [ID]",
-	Short: "GetDevbox or set active devbox name context",
-	Long: `An active devbox name context can be set to reduce the need to provide the
-global --name flag to all commands. 
+	Short: "Get or set active devbox ID context",
+	Long: `An active devbox ID context can be set to reduce the need to provide it to
+commands requiring them. 
 
-If an ID argument is not provided the current active context will be displayed.
-If an ID argument is provided the current active context will be set to it.
+If an ID argument is provided the current active devbox context will be set to
+it.
 
-If the global --verbose flag is provided, full details on the active devbox
+If an ID argument is not provided the current active devbox ID context will be
+displayed.
+
+If the global --verbose flag is provided, full details on the active devbox ID
 will be displayed.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// Ensure correct usage.

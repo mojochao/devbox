@@ -1,4 +1,4 @@
-module github.com/mojochao/devbox-cli
+module github.com/mojochao/devbox
 
 go 1.16
 

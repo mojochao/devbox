@@ -5,7 +5,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/mojochao/devbox-cli/internal/build"
+	"github.com/mojochao/devbox/internal/build"
 )
 
 // versionCmd represents the version command

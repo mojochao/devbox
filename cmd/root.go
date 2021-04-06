@@ -7,8 +7,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/mojochao/devbox-cli/internal/config"
-	"github.com/mojochao/devbox-cli/internal/devbox"
+	"github.com/mojochao/devbox/internal/config"
+	"github.com/mojochao/devbox/internal/devbox"
 )
 
 // These variables are set by persistent flags on the rootCmd.

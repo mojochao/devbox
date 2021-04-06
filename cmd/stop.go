@@ -5,45 +5,45 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/mojochao/devbox-cli/internal/devbox"
+	"github.com/mojochao/devbox/internal/devbox"
 )
 
 // stopCmd represents the stop command
 var stopCmd = &cobra.Command{
-	Use:   "stop",
-	Short: "Stop devbox",
-	Long: `Once a devbox is no longer needed, it should be stopped. This command stops the
-devbox in a Docker container or a Kubernetes pod.
+	Use:   "stop [ID...]",
+	Short: "Stop devboxes",
+	Long: `Once a devbox is no longer needed, it should be stopped. This command stops
+devboxes in Docker containers or a Kubernetes pods.
 
-Once stopped, any files copied over to it will be lost.`,
+If no ID arguments are provided, any set in the active devbox context will be used.
+
+Once stopped, any files copied over to that devbox will be lost.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		// Ensure correct usage.
-		if len(args) > 0 {
-			exit(1, "no arguments allowed")
-		}
-
 		// Load state.
 		state, err := devbox.LoadState(stateFile)
 		exitOnError(err, 1, fmt.Sprintf("cannot load state from %s", stateFile))
 
-		// Ensure we have a devbox id.
-		id, _ := cmd.Flags().GetString("id")
-		id = ensureDevboxID(state, id)
+		// Set ids of devboxes to stop.
+		if len(args) == 0 && state.Active != "" {
+			args = []string{state.Active}
+		}
+		for _, id := range args {
+			id = ensureDevboxID(state, id)
+		}
 
-		// Load devbox by id.
-		devbox, err := state.GetDevbox(id)
-		exitOnError(err, 1, fmt.Sprintf("devbox %s not found", id))
+		// Stop devboxes.
+		for _, id := range args {
+			devbox, err := state.GetDevbox(id)
+			exitOnError(err, 1, fmt.Sprintf("devbox %s not found", id))
 
-		// Stop devbox.
-		err = devbox.Stop()
-		exitOnError(err, 1, fmt.Sprintf("cannot stop devbox %s", id))
+			err = devbox.Stop()
+			exitOnError(err, 1, fmt.Sprintf("cannot stop devbox %s", id))
 
-		// Success!
-		fmt.Println(fmt.Sprintf("devbox %s stopped", id))
+			fmt.Println(fmt.Sprintf("devbox %s stopped", id))
+		}
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(stopCmd)
-	stopCmd.Flags().StringP("id", "i", "", "Devbox id")
 }

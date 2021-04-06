@@ -7,7 +7,7 @@ import (
 	"os/user"
 	"strings"
 
-	"github.com/mojochao/devbox-cli/internal/config"
+	"github.com/mojochao/devbox/internal/config"
 )
 
 func execCommand(command string, message string) error {

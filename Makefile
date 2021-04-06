@@ -81,18 +81,13 @@ clean: ## Clean build artifacts
 #==============================================================================
 
 .PHONY: docker-build
-docker-build: ## Build Docker image
+docker-build: ## Build docker image
 	@echo 'building docker image $(IMAGE):latest'
 	DOCKER_BUILDKIT=1 docker build -f $(DOCKER_FILE) -t $(IMAGE):latest .
 	docker tag $(IMAGE):latest $(IMAGE):$(VERSION)
 
-#.PHONY: docker-login
-#docker-login: ## Login to Docker Hub for pushing Docker images.
-#	@echo 'logging in to Docker Hub'
-#	docker login
-#
 .PHONY: docker-push
-docker-push: ## Push Docker images to Docker Hub
+docker-push: ## Push docker images to Docker Hub
 	@echo 'pushing docker image $(IMAGE):$(TAG) to Docker Hub'
 	docker push $(IMAGE):latest
-#	docker push $(IMAGE):$(VERSION)
+	docker push $(IMAGE):$(VERSION)
