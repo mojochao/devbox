@@ -3,8 +3,6 @@ package devbox
 
 import (
 	"fmt"
-	"os/exec"
-	"strings"
 )
 
 // Config contains configuration data required of a Devbox.
@@ -67,7 +65,7 @@ func (box Devbox) Start() error {
 		message = fmt.Sprintf("starting devbox %s in docker", box.Name)
 	} else {
 		command = fmt.Sprintf("kubectl --kubeconfig %s run --image %s %s -n %s", box.Kubeconfig, box.Image, box.Name, box.Namespace)
-		message = fmt.Sprintf("starting devbox %s in %s", box.Name, box.GetKubeconfigContext())
+		message = fmt.Sprintf("starting devbox %s in cluster with %s kubeconfig", box.Name, box.Kubeconfig)
 	}
 	return execCommand(command, message)
 }
@@ -80,7 +78,7 @@ func (box Devbox) Stop() error {
 		message = fmt.Sprintf("stopping devbox %s in docker", box.Name)
 	} else {
 		command = fmt.Sprintf("kubectl --kubeconfig %s delete pod %s -n %s", box.Kubeconfig, box.Name, box.Namespace)
-		message = fmt.Sprintf("stopping devbox %s in %s cluster %s namespace", box.Name, box.GetKubeconfigContext(), box.Namespace)
+		message = fmt.Sprintf("stopping devbox %s in %s namespace in cluster with %s kubeconfig", box.Name, box.Namespace, box.Kubeconfig)
 	}
 	return execCommand(command, message)
 }
@@ -96,7 +94,7 @@ func (box Devbox) OpenShell(shellPath string) error {
 		message = fmt.Sprintf("opening %s shell in devbox %s in docker", shellPath, box.Name)
 	} else {
 		command = fmt.Sprintf("kubectl --kubeconfig %s exec -it %s -n %s -- %s", box.Kubeconfig, box.Name, box.Namespace, shellPath)
-		message = fmt.Sprintf("opening %s shell in devbox %s in %s cluster %s namespace", box.Shell, box.Name, box.GetKubeconfigContext(), box.Namespace)
+		message = fmt.Sprintf("opening %s shell in devbox %s in %s namespace in cluster with %s kubeconfig", box.Shell, box.Name, box.Namespace, box.Kubeconfig)
 	}
 	return execCommand(command, message)
 }
@@ -109,23 +107,9 @@ func (box Devbox) CopyFile(src string, dst string) error {
 		message = fmt.Sprintf("copying %s to %s in devbox %s in docker", src, dst, box.Name)
 	} else {
 		command = fmt.Sprintf("kubectl --kubeconfig %s cp  %s %s:%s -n %s", box.Kubeconfig, src, box.Name, dst, box.Namespace)
-		message = fmt.Sprintf("copying %s to %s in devbox %s in %s cluster %s namespace", box.Kubeconfig, src, box.Name, dst, box.Namespace)
+		message = fmt.Sprintf("copying %s to %s in devbox %s in %s namespace in cluster with %s kubeconfig", src, dst, box.Name, box.Namespace, box.Kubeconfig)
 	}
 	return execCommand(command, message)
-}
-
-// GetKubeconfigContext returns the current context of a Devbox kubeconfig.
-func (box Devbox) GetKubeconfigContext() string {
-	if box.Kubeconfig == "" {
-		return ""
-	}
-	command := fmt.Sprintf("yq eval '.current-context' %s", box.Kubeconfig)
-	cmd, args := getCommandAndArgs(command)
-	out, err := exec.Command(cmd, args...).Output()
-	if err != nil {
-		panic(err)
-	}
-	return strings.TrimSpace(string(out))
 }
 
 // New returns a fully constructed Devbox.

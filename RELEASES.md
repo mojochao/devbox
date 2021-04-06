@@ -1,5 +1,9 @@
 # RELEASES
 
+## 0.3.0
+
+- Fixed panic when extracting cluster name from kubeconfig
+
 ## 0.2.0
 
 - Improved docs
