@@ -25,20 +25,20 @@ shell session to a devbox that has been previously started.`,
 		id = ensureDevboxID(state, id)
 
 		// Load devbox by id.
-		devbox, err := state.GetDevbox(id)
+		box, err := state.GetDevbox(id)
 		exitOnError(err, 1, fmt.Sprintf("devbox %s not found", id))
 
 		// Open shell on devbox.
-		shell := devbox.Shell
+		shell := box.Shell
 		if len(args) > 0 {
 			shell = strings.Join(args, " ")
 		}
-		err = devbox.OpenShell(shell)
+		err = box.OpenShell(shell)
 		exitOnError(err, 1, "cannot open shell")
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(shellCmd)
-	shellCmd.Flags().StringP("id", "i", "", "Devbox id")
+	shellCmd.Flags().StringP("id", "i", "", "Box id")
 }

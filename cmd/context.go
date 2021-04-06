@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/rodaine/table"
 
 	"github.com/spf13/cobra"
 
@@ -43,11 +42,10 @@ will be displayed.`,
 				return
 			}
 			// Otherwise, load the devbox and print all its info.
-			devbox, err := state.GetDevbox(state.Active)
+			box, err := state.GetDevbox(state.Active)
 			exitOnError(err, 1, fmt.Sprintf("devbox %s not found", state.Active))
-			tbl := table.New("id", "name", "image", "shell", "kubeconfig", "namespace", "description")
-			tbl.AddRow(state.Active, devbox.Name, devbox.Image, devbox.Shell, devbox.Kubeconfig, devbox.Namespace, devbox.Description)
-			tbl.Print()
+			boxes := devbox.Boxes{state.Active: box}
+			printBoxesTable(boxes)
 			return
 		}
 

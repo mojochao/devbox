@@ -3,7 +3,6 @@ package cmd
 import (
 	"fmt"
 
-	"github.com/rodaine/table"
 	"github.com/spf13/cobra"
 
 	"github.com/mojochao/devbox/internal/devbox"
@@ -27,17 +26,8 @@ This command displays their ids and devbox data.`,
 		state, err := devbox.LoadState(stateFile)
 		exitOnError(err, 1, fmt.Sprintf("cannot load state from %s", stateFile))
 
-		// If no boxes in state, we're done.
-		if len(state.Boxes) == 0 {
-			return
-		}
-
-		// Display table of boxes in state.
-		tbl := table.New("id", "name", "image", "shell", "kubeconfig", "namespace", "description")
-		for id, devbox := range state.Boxes {
-			tbl.AddRow(id, devbox.Name, devbox.Image, devbox.Shell, devbox.Kubeconfig, devbox.Namespace, devbox.Description)
-		}
-		tbl.Print()
+		// Display devboxes table.
+		printBoxesTable(state.Boxes)
 	},
 }
 

@@ -33,10 +33,10 @@ Once started, devboxes can be used by opening a shell session with the shell com
 
 		// Start devboxes.
 		for _, id := range args {
-			devbox, err := state.GetDevbox(id)
+			box, err := state.GetDevbox(id)
 			exitOnError(err, 1, fmt.Sprintf("devbox %s not found", id))
 
-			err = devbox.Start()
+			err = box.Start()
 			exitOnError(err, 1, fmt.Sprintf("cannot start devbox %s", id))
 
 			fmt.Println(fmt.Sprintf("devbox %s started", id))
@@ -46,5 +46,5 @@ Once started, devboxes can be used by opening a shell session with the shell com
 
 func init() {
 	rootCmd.AddCommand(startCmd)
-	startCmd.Flags().StringP("id", "i", "", "Devbox id")
+	startCmd.Flags().StringP("id", "i", "", "Box id")
 }

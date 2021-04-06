@@ -37,12 +37,12 @@ var addCmd = &cobra.Command{
 
 		// AddDevbox devbox tp state.
 		box := devbox.New(&devbox.Config{
-			Name:        name,
-			Description: description,
 			Image:       image,
 			Shell:       shell,
-			Kubeconfig:  kubeconfig,
+			Name:        name,
 			Namespace:   namespace,
+			Kubeconfig:  kubeconfig,
+			Description: description,
 		})
 		err = state.AddDevbox(id, box)
 		exitOnError(err, 1, fmt.Sprintf("cannot add devbox %s", id))
@@ -55,10 +55,10 @@ var addCmd = &cobra.Command{
 
 func init() {
 	rootCmd.AddCommand(addCmd)
-	addCmd.Flags().StringP("name", "", "", "Devbox container or pod name")
-	addCmd.Flags().StringP("description", "d", "", "Devbox description")
-	addCmd.Flags().StringP("image", "i", "", "Devbox docker image")
-	addCmd.Flags().StringP("shell", "s", "", "Devbox shell name or path")
-	addCmd.Flags().StringP("kubeconfig", "k", "", "Devbox cluster kubeconfig (Kubernetes devboxes only)")
-	addCmd.Flags().StringP("namespace", "n", "", "Devbox pod namespace (Kubernetes devboxes only)")
+	addCmd.Flags().StringP("image", "i", "", "Box docker image")
+	addCmd.Flags().StringP("shell", "s", "zsh", "Box shell name or path")
+	addCmd.Flags().StringP("name", "", "", "Box container or pod name")
+	addCmd.Flags().StringP("namespace", "n", "", "Box pod namespace (Kubernetes devboxes only)")
+	addCmd.Flags().StringP("kubeconfig", "k", "", "Box cluster kubeconfig (Kubernetes devboxes only)")
+	addCmd.Flags().StringP("description", "d", "", "Box description")
 }

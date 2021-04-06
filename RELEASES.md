@@ -1,5 +1,9 @@
 # RELEASES
 
+## 0.4.0
+
+- Applied minor refactorings for clarity
+
 ## 0.3.0
 
 - Fixed panic when extracting cluster name from kubeconfig

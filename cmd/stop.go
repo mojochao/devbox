@@ -33,10 +33,10 @@ Once stopped, any files copied over to that devbox will be lost.`,
 
 		// Stop devboxes.
 		for _, id := range args {
-			devbox, err := state.GetDevbox(id)
+			box, err := state.GetDevbox(id)
 			exitOnError(err, 1, fmt.Sprintf("devbox %s not found", id))
 
-			err = devbox.Stop()
+			err = box.Stop()
 			exitOnError(err, 1, fmt.Sprintf("cannot stop devbox %s", id))
 
 			fmt.Println(fmt.Sprintf("devbox %s stopped", id))

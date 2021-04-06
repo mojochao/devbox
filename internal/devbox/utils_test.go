@@ -33,15 +33,15 @@ func Test_getCommandAndArgs(t *testing.T) {
 		want1 []string
 	}{
 		{
-			name: "test happy path with args",
-			args: args{s: "echo this is a test"},
-			want: "echo",
+			name:  "test happy path with args",
+			args:  args{s: "echo this is a test"},
+			want:  "echo",
 			want1: []string{"this", "is", "a", "test"},
 		},
 		{
-			name: "test happy path with no args",
-			args: args{s: "ls"},
-			want: "ls",
+			name:  "test happy path with no args",
+			args:  args{s: "ls"},
+			want:  "ls",
 			want1: []string{},
 		},
 	}
@@ -93,4 +93,3 @@ func Test_execCommand(t *testing.T) {
 		})
 	}
 }
-

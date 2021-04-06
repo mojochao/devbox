@@ -8,7 +8,7 @@ import (
 
 var state = State{
 	Active: "minimal",
-	Boxes: map[string]Devbox{
+	Boxes: Boxes{
 		"minimal": {
 			Image: "example.com/image",
 			Name:  "minimal",
@@ -114,7 +114,7 @@ func Test_saveState(t *testing.T) {
 func TestState_Contains(t *testing.T) {
 	type fields struct {
 		Active    string
-		Available map[string]Devbox
+		Available Boxes
 	}
 	type args struct {
 		name string
@@ -160,7 +160,7 @@ func TestState_Contains(t *testing.T) {
 func TestState_Get(t *testing.T) {
 	type fields struct {
 		Active    string
-		Available map[string]Devbox
+		Available Boxes
 	}
 	type args struct {
 		name string
@@ -169,7 +169,7 @@ func TestState_Get(t *testing.T) {
 		name    string
 		fields  fields
 		args    args
-		want    Devbox
+		want    Box
 		wantErr bool
 	}{
 		{
@@ -188,7 +188,7 @@ func TestState_Get(t *testing.T) {
 				Available: state.Boxes,
 			},
 			args:    args{name: "nonesuch"},
-			want:    Devbox{},
+			want:    Box{},
 			wantErr: true,
 		},
 	}

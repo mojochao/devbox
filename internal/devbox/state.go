@@ -14,11 +14,17 @@ import (
 // DefaultStateFile defines the default location of the boxes configuration file.
 const DefaultStateFile = "~/.devbox.state.yaml"
 
+// BoxID is an identifier for a devbox persisted in application state.
+type BoxID = string
+
+// Boxes contains Box values keyed by BoxID.
+type Boxes = map[BoxID]Box
+
 // NewState returns a new State ready for use.
 func NewState(path string) State {
 	return State{
 		Active: "",
-		Boxes:  make(map[string]Devbox),
+		Boxes:  make(Boxes),
 		Path:   path,
 	}
 }
@@ -39,17 +45,17 @@ func LoadState(path string) (State, error) {
 // State contains devbox state.
 type State struct {
 	// Active is the ID of the active devbox context, if any.
-	Active string `yaml:"active"`
+	Active BoxID `yaml:"active"`
 
-	// Boxes is the map of added Devbox items by ID.
-	Boxes map[string]Devbox `yaml:"boxes"`
+	// Boxes is the map of added Box items by ID.
+	Boxes Boxes `yaml:"boxes"`
 
 	// Path is the path to the state file.
 	Path string `yaml:"path"`
 }
 
-// AddDevbox adds a Devbox to State.
-func (boxes State) AddDevbox(id string, box Devbox) error {
+// AddDevbox adds a Box to State.
+func (boxes State) AddDevbox(id BoxID, box Box) error {
 	if boxes.ContainsDevbox(id) {
 		return errors.New("devbox with id found")
 	}
@@ -58,8 +64,8 @@ func (boxes State) AddDevbox(id string, box Devbox) error {
 	return saveState(boxes.Path, boxes)
 }
 
-// RemoveDevbox removes a Devbox from State.
-func (boxes State) RemoveDevbox(id string) error {
+// RemoveDevbox removes a Box from State.
+func (boxes State) RemoveDevbox(id BoxID) error {
 	if !boxes.ContainsDevbox(id) {
 		return errors.New("devbox with id not found")
 	}
@@ -70,17 +76,17 @@ func (boxes State) RemoveDevbox(id string) error {
 	return saveState(boxes.Path, boxes)
 }
 
-// ContainsDevbox tests if a Devbox is in State.
-func (boxes State) ContainsDevbox(id string) bool {
+// ContainsDevbox tests if a Box is in State.
+func (boxes State) ContainsDevbox(id BoxID) bool {
 	_, ok := boxes.Boxes[id]
 	return ok
 }
 
-// GetDevbox returns Devbox in State.
-func (boxes State) GetDevbox(id string) (Devbox, error) {
+// GetDevbox returns Box in State.
+func (boxes State) GetDevbox(id BoxID) (Box, error) {
 	box, ok := boxes.Boxes[id]
 	if !ok {
-		return Devbox{}, errors.New("devbox with id not found")
+		return Box{}, errors.New("devbox with id not found")
 	}
 	return box, nil
 }

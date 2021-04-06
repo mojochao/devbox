@@ -5,60 +5,60 @@ import (
 	"fmt"
 )
 
-// Config contains configuration data required of a Devbox.
+// Config contains configuration data required of a Box.
 type Config struct {
-	// Name of Docker container or Kubernetes pod running devbox image.
-	Name string
-
-	// Description of devbox.
-	Description string
-
 	// Image of devbox running in Docker container or Kubernetes pod.
 	Image string
 
 	// Shell to exec in devbox running in Docker container or Kubernetes pod.
 	Shell string
 
-	// Kubeconfig is path to kubeconfig of Kubernetes cluster hosting devbox pod.
-	Kubeconfig string
+	// Name of Docker container or Kubernetes pod running devbox image.
+	Name string
 
 	// Namespace is namespace of Kubernetes cluster hosting devbox pod.
 	Namespace string
+
+	// Kubeconfig is path to kubeconfig of Kubernetes cluster hosting devbox pod.
+	Kubeconfig string
+
+	// Description of devbox.
+	Description string
 }
 
 // DefaultConfig is a Config containing default configuration values.
 var DefaultConfig = Config{
-	Name:        fmt.Sprintf("devbox-%s", getCurrentUsername()),
-	Description: "",
 	Image:       "github.com/mojochao/devbox-base",
 	Shell:       "sh",
-	Kubeconfig:  "",
+	Name:        fmt.Sprintf("devbox-%s", getCurrentUsername()),
 	Namespace:   "",
+	Kubeconfig:  "",
+	Description: "",
 }
 
-// Devbox contains information on a devbox.
-type Devbox struct {
-	// Name of Docker container or Kubernetes pod running devbox image.
-	Name string `yaml:"name"`
-
-	// Description of devbox.
-	Description string `yaml:"description"`
-
+// Box contains information on a devbox.
+type Box struct {
 	// Image of devbox running in Docker container or Kubernetes pod.
 	Image string `yaml:"image"`
 
 	// Shell to exec in devbox running in Docker container or Kubernetes pod.
 	Shell string `yaml:"shell"`
 
-	// Kubeconfig is path to kubeconfig of Kubernetes cluster hosting devbox pod.
-	Kubeconfig string `yaml:"kubeconfig"`
+	// Name of Docker container or Kubernetes pod running devbox image.
+	Name string `yaml:"name"`
 
 	// Namespace is namespace of Kubernetes cluster hosting devbox pod.
 	Namespace string `yaml:"namespace"`
+
+	// Kubeconfig is path to kubeconfig of Kubernetes cluster hosting devbox pod.
+	Kubeconfig string `yaml:"kubeconfig"`
+
+	// Description of devbox.
+	Description string `yaml:"description"`
 }
 
-// Start starts a Devbox.
-func (box Devbox) Start() error {
+// Start starts a Box.
+func (box Box) Start() error {
 	var command, message string
 	if box.Namespace == "" {
 		command = fmt.Sprintf("docker run --detach --name %s --rm %s", box.Name, box.Image)
@@ -70,8 +70,8 @@ func (box Devbox) Start() error {
 	return execCommand(command, message)
 }
 
-// Stop stops a Devbox.
-func (box Devbox) Stop() error {
+// Stop stops a Box.
+func (box Box) Stop() error {
 	var command, message string
 	if box.Namespace == "" {
 		command = fmt.Sprintf("docker stop %s", box.Name)
@@ -83,8 +83,8 @@ func (box Devbox) Stop() error {
 	return execCommand(command, message)
 }
 
-// OpenShell opens a shell in a Devbox.
-func (box Devbox) OpenShell(shellPath string) error {
+// OpenShell opens a shell in a Box.
+func (box Box) OpenShell(shellPath string) error {
 	if shellPath == "" {
 		shellPath = box.Shell
 	}
@@ -99,8 +99,8 @@ func (box Devbox) OpenShell(shellPath string) error {
 	return execCommand(command, message)
 }
 
-// CopyFile copies a file to a Devbox.
-func (box Devbox) CopyFile(src string, dst string) error {
+// CopyFile copies a file to a Box.
+func (box Box) CopyFile(src string, dst string) error {
 	var command, message string
 	if box.Namespace == "" {
 		command = fmt.Sprintf("docker cp %s %s:%s", src, dst, box.Name)
@@ -112,8 +112,8 @@ func (box Devbox) CopyFile(src string, dst string) error {
 	return execCommand(command, message)
 }
 
-// New returns a fully constructed Devbox.
-func New(cfg *Config) Devbox {
+// New returns a fully constructed Box.
+func New(cfg *Config) Box {
 	if cfg == nil {
 		cfg = &DefaultConfig
 	} else {
@@ -130,12 +130,12 @@ func New(cfg *Config) Devbox {
 			cfg.Shell = DefaultConfig.Shell
 		}
 	}
-	return Devbox{
-		Name:        cfg.Name,
-		Description: cfg.Description,
+	return Box{
 		Image:       cfg.Image,
 		Shell:       cfg.Shell,
-		Kubeconfig:  cfg.Kubeconfig,
+		Name:        cfg.Name,
 		Namespace:   cfg.Namespace,
+		Kubeconfig:  cfg.Kubeconfig,
+		Description: cfg.Description,
 	}
 }

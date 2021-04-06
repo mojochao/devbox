@@ -3,6 +3,7 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"github.com/rodaine/table"
 	"os"
 
 	"github.com/mitchellh/go-homedir"
@@ -48,4 +49,16 @@ func fileExists(path string) bool {
 		return false
 	}
 	return !info.IsDir()
+}
+
+func printBoxesTable(boxes devbox.Boxes) {
+	if len(boxes) == 0 {
+		return
+	}
+	tbl := table.New("id", "image", "shell", "name", "namespace", "kubeconfig", "description")
+	for id, box := range boxes {
+		tbl.AddRow(id, box.Image, box.Shell, box.Name, box.Namespace, box.Kubeconfig, box.Description)
+	}
+	tbl.Print()
+
 }

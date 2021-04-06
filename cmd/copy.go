@@ -36,16 +36,16 @@ devbox container.`,
 		id = ensureDevboxID(state, id)
 
 		// Load devbox by id.
-		devbox, err := state.GetDevbox(id)
+		box, err := state.GetDevbox(id)
 		exitOnError(err, 1, fmt.Sprintf("devbox %s not found", id))
 
 		// Copy files to devbox.
-		err = devbox.CopyFile(args[0], args[1])
+		err = box.CopyFile(args[0], args[1])
 		exitOnError(err, 1, fmt.Sprintf("cannot copy file to devbox %s", id))
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(copyCmd)
-	copyCmd.Flags().StringP("id", "i", "", "Devbox id")
+	copyCmd.Flags().StringP("id", "i", "", "Box id")
 }

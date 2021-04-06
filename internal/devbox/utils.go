@@ -40,4 +40,3 @@ func getCurrentUsername() string {
 	}
 	return currentUser.Username
 }
-
