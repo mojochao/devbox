@@ -1,5 +1,9 @@
 # RELEASES
 
+## 0.5.1
+
+- Bumped version for rebuild.
+
 ## 0.5.0
 
 - Removed copy command. It's less capable than 'docker cp' or 'kubectl cp' so
