@@ -67,9 +67,9 @@ and details of added devboxes will be displayed.
 After initialization, a typical startup and provisioning workflow looks like
 the following.
 
-    devbox add ...   # add new devbox to state
-    devbox start     # start the new devbox
-    devbox copy ...  # copy desired files to the new devbox
+    devbox add
+    devbox start
+    # copy local files to devbox with 'docker cp' and 'kubectl cp' as desired
 
 Once started and configuration, the devbox is used interactively in shells
 running in the devbox container or pod until no longer needed.
@@ -90,5 +90,4 @@ it may be removed from devbox management.
 
 Once removed, devboxes will not show up in the output of the `devbox list`
 command and cannot be started. If needed again, re-add the devbox with the
-`devbox add` command and provision it again for use with the `devbox copy`
-command.
+`devbox add` command and provision it again for use as desired.

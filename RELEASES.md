@@ -1,5 +1,10 @@
 # RELEASES
 
+## 0.5.0
+
+- Removed copy command. It's less capable than 'docker cp' or 'kubectl cp' so
+  doesn't add any real value.
+  
 ## 0.4.0
 
 - Applied minor refactorings for clarity
