@@ -61,7 +61,7 @@ type Box struct {
 func (box Box) Start() error {
 	var command, message string
 	if box.Namespace == "" {
-		command = fmt.Sprintf("docker run --detach --name %s --rm %s", box.Name, box.Image)
+		command = fmt.Sprintf("docker run --detach --name %s --rm --ulimit nofile=90000:90000 %s", box.Name, box.Image)
 		message = fmt.Sprintf("starting devbox %s in docker", box.Name)
 	} else {
 		command = fmt.Sprintf("kubectl --kubeconfig %s run --image %s %s -n %s", box.Kubeconfig, box.Image, box.Name, box.Namespace)

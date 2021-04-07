@@ -1,6 +1,6 @@
 #==============================================================================
 #
-# Makefile for building Docker images and pushing them to AWS ECR registries.
+# Makefile for building Docker images and pushing them to Docker Hub.
 #
 #==============================================================================
 
@@ -9,19 +9,8 @@ APP=devbox
 PKG=github.com/mojochao/$(APP)
 VERSION := $(shell cat VERSION | tr -d '\n')
 
-# Discover OS for default static build configuration.
-OS = shell("uname")
-ifeq ($(OS),Linux)
-    OS=linux
-else
-    OS=darwin
-endif
-
-# Set GOOS for static builds using discovered OS if not provided.
-GOOS ?= $(OS)
-
 # Set Docker image build and run configuration.
-DOCKER_FILE ?= Dockerfile
+DOCKERFILE ?= Dockerfile
 IMAGE = mojochao/$(APP)
 
 #==============================================================================
@@ -57,7 +46,7 @@ prep: ## Prepare Golang tools needed for builds
 .PHONY: build
 build: ## Build the application
 	@echo 'building $(APP)'
-	CGO_ENABLED=0 GOOS=$(GOOS) govvv build -a -installsuffix cgo -ldflags '-extldflags "-static"' -pkg $(PKG)/internal/build -o $(APP) .
+	CGO_ENABLED=0 govvv build -a -installsuffix cgo -ldflags '-extldflags "-static"' -pkg $(PKG)/internal/build -o $(APP) .
 
 .PHONY: lint
 lint: ## Lint the application
@@ -83,7 +72,7 @@ clean: ## Clean build artifacts
 .PHONY: docker-build
 docker-build: ## Build docker image
 	@echo 'building docker image $(IMAGE):latest'
-	DOCKER_BUILDKIT=1 docker build -f $(DOCKER_FILE) -t $(IMAGE):latest .
+	DOCKER_BUILDKIT=1 docker build -f $(DOCKERFILE) -t $(IMAGE):latest .
 	docker tag $(IMAGE):latest $(IMAGE):$(VERSION)
 
 .PHONY: docker-push

@@ -1,5 +1,9 @@
 # RELEASES
 
+## 0.6.0
+
+- Bumped ulimits on file descriptors for load test usage.
+
 ## 0.5.1
 
 - Bumped version for rebuild.
