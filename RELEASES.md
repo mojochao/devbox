@@ -1,5 +1,9 @@
 # RELEASES
 
+## 0.7.0
+
+- Enhanced shell command
+
 ## 0.6.0
 
 - Bumped ulimits on file descriptors for load test usage.

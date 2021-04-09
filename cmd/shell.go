@@ -9,20 +9,21 @@ import (
 
 // shellCmd represents the shell command
 var shellCmd = &cobra.Command{
-	Use:   "shell [SHELL]",
-	Short: "Open interactive shell in devbox",
+	Aliases: []string{"sh"},
+	Use:     "shell [ID]",
+	Short:   "Open interactive shell in devbox",
 	Long: `A devbox does nothing unless you use it. This is done by opening a
 shell session to a devbox that has been previously started.
 
-If no SHELL argument is provided, the shell configured in the devbox will be
-used defaulting to 'zsh' if not configured in the devbox.
+If no ID argument is provided, any set in the active devbox context will be
+used.
 
-If a SHELL argument is provided, that shell will be used instead of the shell
-configuration in the devbox`,
+If the --shell flag is provided, any set in the active devbox context will be
+used`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// Ensure correct usage.
 		if len(args) > 1 {
-			exit(1, "only one SHELL argument allowed")
+			exit(1, "only one ID argument allowed")
 		}
 
 		// Load state.
@@ -30,7 +31,10 @@ configuration in the devbox`,
 		exitOnError(err, 1, "cannot load boxes")
 
 		// Ensure we have a devbox id.
-		id, _ := cmd.Flags().GetString("id")
+		id := state.Active
+		if len(args) == 1 {
+			id = args[0]
+		}
 		id = ensureDevboxID(state, id)
 
 		// Load devbox by id.
@@ -38,10 +42,7 @@ configuration in the devbox`,
 		exitOnError(err, 1, fmt.Sprintf("devbox %s not found", id))
 
 		// Open shell on devbox.
-		shell := box.Shell
-		if len(args) == 1 {
-			shell = args[0]
-		}
+		shell, _ := cmd.Flags().GetString("shell")
 		err = box.OpenShell(shell)
 		exitOnError(err, 1, "cannot open shell")
 	},
@@ -49,5 +50,5 @@ configuration in the devbox`,
 
 func init() {
 	rootCmd.AddCommand(shellCmd)
-	shellCmd.Flags().StringP("id", "i", "", "Box id")
+	shellCmd.Flags().StringP("shell", "s", "", "shell name or path")
 }
