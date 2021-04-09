@@ -1,5 +1,14 @@
 # RELEASES
 
+## 0.9.0
+
+- Add setup command to provision devbox container
+
+## 0.8.0
+
+- Enhanced box state with the devbox username and reflected that in the add,
+  ctx, and list commands.
+
 ## 0.7.0
 
 - Enhanced shell command

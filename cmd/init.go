@@ -2,9 +2,11 @@ package cmd
 
 import (
 	"fmt"
+
 	"github.com/spf13/cobra"
 
 	"github.com/mojochao/devbox/internal/devbox"
+	"github.com/mojochao/devbox/internal/util"
 )
 
 // initCmd represents the init command
@@ -20,7 +22,7 @@ global --state flag.`,
 		// Ensure correct usage. An existing boxes file can only be re-initialized
 		// with the local --force flag.
 		var forceInit bool
-		if fileExists(stateFile) {
+		if util.FileExists(stateFile) {
 			force, _ := cmd.Flags().GetBool("force")
 			if !force {
 				exit(1, fmt.Sprintf("state already initialized in %s", stateFile))

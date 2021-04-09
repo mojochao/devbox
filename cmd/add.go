@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+
 	"github.com/spf13/cobra"
 
 	"github.com/mojochao/devbox/internal/devbox"
@@ -27,6 +28,7 @@ var addCmd = &cobra.Command{
 		if image == "" {
 			exit(1, "missing --image flag")
 		}
+		user, _ := cmd.Flags().GetString("user")
 		shell, _ := cmd.Flags().GetString("shell")
 		kubeconfig, _ := cmd.Flags().GetString("kubeconfig")
 		namespace, _ := cmd.Flags().GetString("namespace")
@@ -35,9 +37,10 @@ var addCmd = &cobra.Command{
 		state, err := devbox.LoadState(stateFile)
 		exitOnError(err, 1, fmt.Sprintf("cannot load state from %s", stateFile))
 
-		// AddDevbox devbox tp state.
+		// AddDevbox devbox to state.
 		box := devbox.New(&devbox.Config{
 			Image:       image,
+			User:        user,
 			Shell:       shell,
 			Name:        name,
 			Namespace:   namespace,
@@ -56,6 +59,7 @@ var addCmd = &cobra.Command{
 func init() {
 	rootCmd.AddCommand(addCmd)
 	addCmd.Flags().StringP("image", "i", "", "Box docker image")
+	addCmd.Flags().StringP("user", "u", "developer", "Box user name")
 	addCmd.Flags().StringP("shell", "s", "zsh", "Box shell name or path")
 	addCmd.Flags().StringP("name", "", "", "Box container or pod name")
 	addCmd.Flags().StringP("namespace", "n", "", "Box pod namespace (Kubernetes devboxes only)")

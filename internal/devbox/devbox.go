@@ -3,12 +3,20 @@ package devbox
 
 import (
 	"fmt"
+	"os"
+	"strings"
+
+	"github.com/mitchellh/go-homedir"
+	"github.com/mojochao/devbox/internal/util"
 )
 
 // Config contains configuration data required of a Box.
 type Config struct {
 	// Image of devbox running in Docker container or Kubernetes pod.
 	Image string
+
+	// User in docker container or Kubernetes pod running devbox image.
+	User string
 
 	// Shell to exec in devbox running in Docker container or Kubernetes pod.
 	Shell string
@@ -29,6 +37,7 @@ type Config struct {
 // DefaultConfig is a Config containing default configuration values.
 var DefaultConfig = Config{
 	Image:       "github.com/mojochao/devbox-base",
+	User:        "developer",
 	Shell:       "sh",
 	Name:        fmt.Sprintf("devbox-%s", getCurrentUsername()),
 	Namespace:   "",
@@ -40,6 +49,9 @@ var DefaultConfig = Config{
 type Box struct {
 	// Image of devbox running in Docker container or Kubernetes pod.
 	Image string `yaml:"image"`
+
+	// User in docker container or Kubernetes pod running devbox image.
+	User string `yaml:"user"`
 
 	// Shell to exec in devbox running in Docker container or Kubernetes pod.
 	Shell string `yaml:"shell"`
@@ -57,6 +69,49 @@ type Box struct {
 	Description string `yaml:"description"`
 }
 
+// New returns a fully constructed Box.
+func New(cfg *Config) Box {
+	if cfg == nil {
+		cfg = &DefaultConfig
+	} else {
+		if cfg.Image == "" {
+			cfg.Image = DefaultConfig.Image
+		}
+		if cfg.User == "" {
+			cfg.User = DefaultConfig.User
+		}
+		if cfg.Shell == "" {
+			cfg.Shell = DefaultConfig.Shell
+		}
+		if cfg.Name == "" {
+			cfg.Name = DefaultConfig.Name
+		}
+		if cfg.Namespace == "" {
+			cfg.Namespace = DefaultConfig.Namespace
+		}
+		if cfg.Kubeconfig == "" {
+			cfg.Kubeconfig = DefaultConfig.Kubeconfig
+		}
+		if cfg.Description == "" {
+			cfg.Description = DefaultConfig.Description
+		}
+	}
+	return Box{
+		Image:       cfg.Image,
+		User:        cfg.User,
+		Shell:       cfg.Shell,
+		Name:        cfg.Name,
+		Namespace:   cfg.Namespace,
+		Kubeconfig:  cfg.Kubeconfig,
+		Description: cfg.Description,
+	}
+}
+
+// HomeDir returns the home directory of the devbox user.
+func (box Box) HomeDir() string {
+	return fmt.Sprintf("/home/%s", box.User)
+}
+
 // Start starts a Box.
 func (box Box) Start() error {
 	var command, message string
@@ -68,6 +123,36 @@ func (box Box) Start() error {
 		message = fmt.Sprintf("starting devbox %s in cluster with %s kubeconfig", box.Name, box.Kubeconfig)
 	}
 	return execCommand(command, message)
+}
+
+// Setup sets up a Box.
+func (box Box) Setup(manifestType string, includes []string, excludes []string) error {
+	items := manifest[manifestType]
+	for _, item := range items {
+		if item.Path == "" {
+			continue
+		}
+		if strings.HasSuffix(item.Path, "/") && !util.DirExists(item.Path) {
+			continue
+		}
+		if !strings.HasSuffix(item.Path, "/") && !util.FileExists(item.Path) {
+			continue
+		}
+		if err := box.copyPath(item.Path); err != nil {
+			return err
+		}
+
+		for _, command := range item.Commands {
+			if command == done {
+				return nil
+			}
+			command = fmt.Sprintf("exec -n %s %s -- %s", box.Namespace, box.Name, command)
+			if err := box.execCommand(strings.Split(command, " ")); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
 
 // Stop stops a Box.
@@ -112,30 +197,34 @@ func (box Box) CopyFile(src string, dst string) error {
 	return execCommand(command, message)
 }
 
-// New returns a fully constructed Box.
-func New(cfg *Config) Box {
-	if cfg == nil {
-		cfg = &DefaultConfig
-	} else {
-		if cfg.Name == "" {
-			cfg.Name = DefaultConfig.Name
+func (box Box) copyPath(path string) error {
+	src, _ := homedir.Expand(path)
+	src, err := os.Readlink(src)
+	if err != nil {
+		_, ok := err.(*os.PathError)
+		if !ok {
+			return err
 		}
-		if cfg.Description == "" {
-			cfg.Description = DefaultConfig.Description
-		}
-		if cfg.Image == "" {
-			cfg.Image = DefaultConfig.Image
-		}
-		if cfg.Shell == "" {
-			cfg.Shell = DefaultConfig.Shell
-		}
+		src, _ = homedir.Expand(path)
 	}
-	return Box{
-		Image:       cfg.Image,
-		Shell:       cfg.Shell,
-		Name:        cfg.Name,
-		Namespace:   cfg.Namespace,
-		Kubeconfig:  cfg.Kubeconfig,
-		Description: cfg.Description,
+
+	dst := fmt.Sprintf("%s:%s", box.Name, strings.Replace(path, "~", box.HomeDir(), 1))
+	args := []string{"cp", src, dst}
+	return box.execCommand(args)
+}
+
+func (box Box) execCommand(args []string) error {
+	for i, arg := range args {
+		arg = strings.Replace(arg, "{box.User}", box.User, -1)
+		arg = strings.Replace(arg, "{box.Shell}", box.Shell, -1)
+		arg = strings.Replace(arg, "{box.Name}", box.Name, -1)
+		arg = strings.Replace(arg, "{box.Namespace}", box.Namespace, -1)
+		args[i] = arg
 	}
+	if box.Namespace == "" {
+		return util.ExecCommand("docker", args...)
+	}
+	kubeArgs := []string{"--kubeconfig", box.Kubeconfig}
+	kubeArgs = append(kubeArgs, args...)
+	return util.ExecCommand("kubectl", kubeArgs...)
 }

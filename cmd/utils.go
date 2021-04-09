@@ -1,12 +1,10 @@
 package cmd
 
 import (
-	"errors"
 	"fmt"
-	"github.com/rodaine/table"
 	"os"
 
-	"github.com/mitchellh/go-homedir"
+	"github.com/rodaine/table"
 
 	"github.com/mojochao/devbox/internal/devbox"
 )
@@ -42,22 +40,13 @@ func exitOnError(err error, exitCode int, msg string) {
 	exit(exitCode, fmt.Sprintf("%s: %v", msg, err))
 }
 
-func fileExists(path string) bool {
-	path, _ = homedir.Expand(path)
-	info, err := os.Stat(path)
-	if errors.Is(err, os.ErrNotExist) {
-		return false
-	}
-	return !info.IsDir()
-}
-
 func printBoxesTable(boxes devbox.Boxes) {
 	if len(boxes) == 0 {
 		return
 	}
-	tbl := table.New("id", "image", "shell", "name", "namespace", "kubeconfig", "description")
+	tbl := table.New("id", "image", "user", "shell", "name", "namespace", "kubeconfig", "description")
 	for id, box := range boxes {
-		tbl.AddRow(id, box.Image, box.Shell, box.Name, box.Namespace, box.Kubeconfig, box.Description)
+		tbl.AddRow(id, box.Image, box.User, box.Shell, box.Name, box.Namespace, box.Kubeconfig, box.Description)
 	}
 	tbl.Print()
 

@@ -69,7 +69,11 @@ the following.
 
     devbox add
     devbox start
-    # copy local files to devbox with 'docker cp' and 'kubectl cp' as desired
+    devbox setup
+
+Note that the `devbox setup` command does not have to be run if you'd rather
+have complete control. You can copy local files to the devbox with 'docker cp'
+and 'kubectl cp' as desired if you wish.
 
 Once started and configuration, the devbox is used interactively in shells
 running in the devbox container or pod until no longer needed.

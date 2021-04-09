@@ -111,7 +111,7 @@ func Test_saveState(t *testing.T) {
 	}
 }
 
-func TestState_Contains(t *testing.T) {
+func TestState_ContainsDevbox(t *testing.T) {
 	type fields struct {
 		Active    string
 		Available Boxes
@@ -157,7 +157,7 @@ func TestState_Contains(t *testing.T) {
 	}
 }
 
-func TestState_Get(t *testing.T) {
+func TestState_GetDevbox(t *testing.T) {
 	type fields struct {
 		Active    string
 		Available Boxes
