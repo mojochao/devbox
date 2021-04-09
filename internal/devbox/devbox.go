@@ -67,6 +67,9 @@ type Box struct {
 
 	// Description of devbox.
 	Description string `yaml:"description"`
+
+	// Manifest of devbox.
+	Manifest Manifest `yaml:"defaultManifest"`
 }
 
 // New returns a fully constructed Box.
@@ -104,6 +107,7 @@ func New(cfg *Config) Box {
 		Namespace:   cfg.Namespace,
 		Kubeconfig:  cfg.Kubeconfig,
 		Description: cfg.Description,
+		Manifest:    defaultManifest,
 	}
 }
 
@@ -127,7 +131,7 @@ func (box Box) Start() error {
 
 // Setup sets up a Box.
 func (box Box) Setup(manifestType string, includes []string, excludes []string) error {
-	items := manifest[manifestType]
+	items := defaultManifest[manifestType]
 	for _, item := range items {
 		if item.Path == "" {
 			continue

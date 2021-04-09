@@ -1,8 +1,12 @@
 # RELEASES
 
+## 0.10.0
+
+- Enhanced box state to enable declarative provisioning per devbox
+
 ## 0.9.0
 
-- Add setup command to provision devbox container
+- Added setup command to provision devbox container
 
 ## 0.8.0
 
