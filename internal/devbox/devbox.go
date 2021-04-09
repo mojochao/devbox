@@ -150,7 +150,12 @@ func (box Box) Setup(manifestType string, includes []string, excludes []string) 
 			if command == done {
 				return nil
 			}
-			command = fmt.Sprintf("exec -n %s %s -- %s", box.Namespace, box.Name, command)
+
+			namespace := ""
+			if box.Namespace != "" {
+				namespace = fmt.Sprintf("--namespace %s", box.Namespace)
+			}
+			command = fmt.Sprintf("exec %s %s -- %s", namespace, box.Name, command)
 			if err := box.execCommand(strings.Split(command, " ")); err != nil {
 				return err
 			}

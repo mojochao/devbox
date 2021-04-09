@@ -28,7 +28,7 @@ used`,
 
 		// Load state.
 		state, err := devbox.LoadState(stateFile)
-		exitOnError(err, 1, "cannot load boxes")
+		exitOnError(err, 1, fmt.Sprintf("cannot load state from %s", stateFile))
 
 		// Ensure we have a devbox id.
 		id := state.Active

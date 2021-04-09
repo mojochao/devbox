@@ -19,7 +19,7 @@ than ephemeral.  Any files copied to the devbox will be lost once stopped.
 This application provides the following functionality:
 
 - managing devboxes with the `list`, `add` and `remove` commands
-- operating devboxes with the `start`, `stop`, `shell` and `copy` commands
+- operating devboxes with the `start`, `stop`, `setup` and `shell` commands
 - providing version and other build metadata with the `version` command
 
 This application persists its state in a state file, which by default is

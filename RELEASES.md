@@ -1,5 +1,9 @@
 # RELEASES
 
+## 0.11.0
+
+- Fixed a bug when executing setup commands in Docker devboxes.
+
 ## 0.10.0
 
 - Enhanced box state to enable declarative provisioning per devbox

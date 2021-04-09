@@ -11,7 +11,7 @@ import (
 	"github.com/mojochao/devbox/internal/config"
 )
 
-// DefaultStateFile defines the default location of the boxes configuration file.
+// DefaultStateFile defines the default location of the state file.
 const DefaultStateFile = "~/.devbox.state.yaml"
 
 // BoxID is an identifier for a devbox persisted in application state.
@@ -103,7 +103,7 @@ func (boxes State) Save(paths ...string) error {
 			return err
 		}
 		if config.Verbose {
-			fmt.Printf("saved boxes to %s\n", path)
+			fmt.Printf("saved state to %s\n", path)
 		}
 	}
 	return nil
