@@ -1,4 +1,9 @@
-# RELEASES
+# Devbox Releases
+
+## 0.12.0
+
+- Improved the UX of the `add` command
+- Added `--reset` flag to the `context` command
 
 ## 0.11.0
 

@@ -1,4 +1,4 @@
-# DEVBOX
+# Devbox
 
 Interactively running and debugging in containers can be hell. For such an
 environment, a development box running inside the container is useful.
@@ -6,19 +6,20 @@ environment, a development box running inside the container is useful.
 This `devbox` CLI manages use of terminal-based development environment devboxes.
 A devbox is defined in terms of:
 
+- name of the devbox image to run in a container or pod
+- name of the devbox user to login as
+- name or path of the devbox shell to run in the container or pod
 - name of container or pod running the devbox image
-- description of devbox usage
-- image name of the devbox to run in a container or pod
-- shell name or path to run in the container or pod
-- kubeconfig of Kubernetes cluster to run devbox pods (optional, Kubernetes only)
 - namespace of Kubernetes cluster to run devbox pods  (optional, Kubernetes only
+- kubeconfig of Kubernetes cluster to run devbox pods (optional, Kubernetes only)
+- description of devbox usage
 
 Note that a devbox is intended to be a "pet" not "cattle", more persistent
 than ephemeral.  Any files copied to the devbox will be lost once stopped.
 
 This application provides the following functionality:
 
-- managing devboxes with the `list`, `add` and `remove` commands
+- managing devboxes with the `list`, `context`, `add` and `remove` commands
 - operating devboxes with the `start`, `stop`, `setup` and `shell` commands
 - providing version and other build metadata with the `version` command
 

@@ -10,28 +10,30 @@ import (
 
 // addCmd represents the add command
 var addCmd = &cobra.Command{
-	Use:   "add ID [flags]",
-	Short: "Add devbox to state",
-	Long:  `Devboxes must be added before they can be started and used.`,
+	Use:   "add ID IMAGE [flags]",
+	Short: "Add devbox with ID using IMAGE to state",
+	Long: `Devboxes must be added before they can be started and used.
+
+Devboxes are identified a unique ID, but many devboxes can use the same image.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// Ensure correct usage.
 		if len(args) < 1 {
 			exit(1, "missing ID argument")
 		}
-		if len(args) > 1 {
+		if len(args) < 2 {
+			exit(1, "missing IMAGE argument")
+		}
+		if len(args) > 2 {
 			exit(1, "extra arguments found")
 		}
 		id := args[0]
-		name, _ := cmd.Flags().GetString("name")
-		description, _ := cmd.Flags().GetString("description")
-		image, _ := cmd.Flags().GetString("image")
-		if image == "" {
-			exit(1, "missing --image flag")
-		}
+		image := args[1]
 		user, _ := cmd.Flags().GetString("user")
 		shell, _ := cmd.Flags().GetString("shell")
-		kubeconfig, _ := cmd.Flags().GetString("kubeconfig")
+		name, _ := cmd.Flags().GetString("name")
 		namespace, _ := cmd.Flags().GetString("namespace")
+		kubeconfig, _ := cmd.Flags().GetString("kubeconfig")
+		description, _ := cmd.Flags().GetString("description")
 
 		// Load state.
 		state, err := devbox.LoadState(stateFile)

@@ -11,9 +11,9 @@ import (
 // removeCmd represents the remove command
 var removeCmd = &cobra.Command{
 	Aliases: []string{"rm"},
-	Use:   "remove [ID...]",
-	Short: "Remove devboxes from state",
-	Long:  `Once a devbox is no longer needed it should be removed.
+	Use:     "remove [ID...]",
+	Short:   "Remove devboxes from state",
+	Long: `Once a devbox is no longer needed it should be removed.
 
 If no ID arguments are provided, any set in the active devbox context will be used.`,
 	Run: func(cmd *cobra.Command, args []string) {
@@ -37,7 +37,7 @@ If no ID arguments are provided, any set in the active devbox context will be us
 			// Success!
 			fmt.Printf("removed devbox %s\n", id)
 			if state.Active != "" {
-				fmt.Println("reset active devbox context to nothing")
+				fmt.Println("reset active devbox context")
 			}
 		}
 	},
