@@ -1,5 +1,10 @@
 # Devbox Releases
 
+## 0.12.1
+
+- Fixes bad help descriptions of `add` command flags caused by an overzealous
+  reach inside string literals
+
 ## 0.12.0
 
 - Improved the UX of the `add` command

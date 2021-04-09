@@ -60,11 +60,11 @@ Devboxes are identified a unique ID, but many devboxes can use the same image.`,
 
 func init() {
 	rootCmd.AddCommand(addCmd)
-	addCmd.Flags().StringP("image", "i", "", "Box docker image")
-	addCmd.Flags().StringP("user", "u", "developer", "Box user name")
-	addCmd.Flags().StringP("shell", "s", "zsh", "Box shell name or path")
-	addCmd.Flags().StringP("name", "", "", "Box container or pod name")
-	addCmd.Flags().StringP("namespace", "n", "", "Box pod namespace (Kubernetes devboxes only)")
-	addCmd.Flags().StringP("kubeconfig", "k", "", "Box cluster kubeconfig (Kubernetes devboxes only)")
-	addCmd.Flags().StringP("description", "d", "", "Box description")
+	addCmd.Flags().StringP("image", "i", "", "Devbox docker image")
+	addCmd.Flags().StringP("user", "u", "developer", "Devbox user name")
+	addCmd.Flags().StringP("shell", "s", "zsh", "Devbox shell name or path")
+	addCmd.Flags().StringP("name", "", "", "Devbox container or pod name")
+	addCmd.Flags().StringP("namespace", "n", "", "Devbox pod namespace (Kubernetes devboxes only)")
+	addCmd.Flags().StringP("kubeconfig", "k", "", "Devbox cluster kubeconfig (Kubernetes devboxes only)")
+	addCmd.Flags().StringP("description", "d", "", "Devbox description")
 }

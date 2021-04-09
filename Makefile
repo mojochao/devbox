@@ -12,6 +12,7 @@ VERSION := $(shell cat VERSION | tr -d '\n')
 # Set Docker image build and run configuration.
 DOCKERFILE ?= Dockerfile
 IMAGE = mojochao/$(APP)
+TAG ?= $(VERSION)
 
 #==============================================================================
 #
@@ -72,11 +73,15 @@ clean: ## Clean build artifacts
 .PHONY: docker-build
 docker-build: ## Build docker image
 	@echo 'building docker image $(IMAGE):latest'
-	DOCKER_BUILDKIT=1 docker build -f $(DOCKERFILE) -t $(IMAGE):latest .
-	docker tag $(IMAGE):latest $(IMAGE):$(VERSION)
+	DOCKER_BUILDKIT=1 docker build -f $(DOCKERFILE) --progress=plain -t $(IMAGE):latest .
+
+.PHONY: docker-tag
+docker-tag: ## Tag built image with $TAG (default: VERSION)
+	@echo 'tagging docker image $(IMAGE):$(TAG)'
+	docker tag $(IMAGE):latest $(IMAGE):$(TAG)
 
 .PHONY: docker-push
-docker-push: ## Push docker images to Docker Hub
-	@echo 'pushing docker image $(IMAGE):$(TAG) to Docker Hub'
+docker-push: ## Push image tags to Docker Hub
+	@echo 'pushing docker image $(IMAGE):latest,$(TAG) to Docker Hub'
 	docker push $(IMAGE):latest
-	docker push $(IMAGE):$(VERSION)
+	docker push $(IMAGE):$(TAG)
