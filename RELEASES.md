@@ -1,5 +1,11 @@
 # Devbox Releases
 
+## 0.13.0
+
+- Changed the `done` command used in processing devbox manifest commands to
+  `break`, as the semantics are the same as breaking out of a for loop over
+  the manifest items
+
 ## 0.12.1
 
 - Fixes bad help descriptions of `add` command flags caused by an overzealous

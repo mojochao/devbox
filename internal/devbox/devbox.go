@@ -147,7 +147,7 @@ func (box Box) Setup(manifestType string, includes []string, excludes []string) 
 		}
 
 		for _, command := range item.Commands {
-			if command == done {
+			if command == breakCommand {
 				return nil
 			}
 

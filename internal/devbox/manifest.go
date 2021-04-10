@@ -13,7 +13,7 @@ type ManifestItem struct {
 	Commands []string `yaml:"commands,omitempty"`
 }
 
-const done = "done"
+const breakCommand = "break"
 
 // ManifestTypes contains the list of defaultManifest types in install order.
 var ManifestTypes = []string{
@@ -118,14 +118,14 @@ var defaultManifest = Manifest{
 			Path: "~/.spacemacs",
 			Commands: []string{
 				"git clone https://github.com/syl20bnr/spacemacs /home/{box.User}/.emacs.d",
-				done,
+				breakCommand,
 			},
 		},
 		{
 			Path: "~/.doom.d/",
 			Commands: []string{
 				"git clone https://github.com/hlissner/doom-emacs /home/{box.User}/.emacs.d",
-				done,
+				breakCommand,
 			},
 		},
 		{
