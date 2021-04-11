@@ -62,7 +62,7 @@ If any --exclude flags are provided, those manifest types will not be setup.`,
 				}
 
 				fmt.Printf("setting up devbox %s with %s config\n", id, manifestType)
-				err = box.Setup(manifestType, includes, excludes)
+				err = box.Setup(manifestType)
 				exitOnError(err, 1, fmt.Sprintf("cannot setup devbox %s with %s config", id, manifestType))
 			}
 		}

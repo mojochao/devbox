@@ -1,5 +1,9 @@
 # Devbox Releases
 
+## 0.13.1
+
+- Fixes for bugs in use of kubeconfig path and namespace in kubectl commands 
+
 ## 0.13.0
 
 - Changed the `done` command used in processing devbox manifest commands to
