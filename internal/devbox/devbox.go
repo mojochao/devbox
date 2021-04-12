@@ -239,7 +239,10 @@ func (box Box) execCommand(args []string) error {
 		return util.ExecCommand("docker", args...)
 	}
 	kubeconfig, _ := homedir.Expand(box.Kubeconfig)
-	kubeArgs := []string{"--kubeconfig", kubeconfig}
+	kubeArgs := []string{
+		fmt.Sprintf("--kubeconfig=%s", kubeconfig),
+		fmt.Sprintf("--namespace=%s", box.Namespace),
+	}
 	kubeArgs = append(kubeArgs, args...)
 	return util.ExecCommand("kubectl", kubeArgs...)
 }

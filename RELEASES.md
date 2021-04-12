@@ -2,6 +2,10 @@
 
 ## 0.13.1
 
+- Fix for a bug omitting `--namespace` in generated kubectl commands
+
+## 0.13.1
+
 - Fixes for bugs in use of kubeconfig path and namespace in kubectl commands 
 
 ## 0.13.0
